@@ -13,6 +13,7 @@ import lombok.Data;
 public class CreateStudentRequest {
     @NotBlank String name;
     @NotBlank @Email String email;
+    @NotBlank String password;
     @NotBlank String phoneNumber;
     @Valid AddressDTO address;
     @NotNull DocumentType documentType;

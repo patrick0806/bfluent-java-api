@@ -31,7 +31,7 @@ public class StudentDatasource implements StudentRepository {
     }
 
     @Override
-    public Optional<Student> findByEmaiL(String email) {
+    public Optional<Student> findByEmail(String email) {
         return studentPostgres.findByEmail(email).map(StudentModelMapper.INSTANCE::toEntity);
     }
 

@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface StudentRepository {
     Student save(Student student);
     Optional<UserDetails> findByEmailForAuth(String email);
-    Optional<Student> findByEmaiL(String email);
+    Optional<Student> findByEmail(String email);
     Long countStudents();
 }
