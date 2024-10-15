@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CreateStudentUseCase {
@@ -33,7 +32,7 @@ public class CreateStudentUseCase {
 
         List<String> initials = Arrays.stream(name.split("\\s+"))
                 .map(word -> String.format("%s", Character.toUpperCase(word.charAt(0))))
-                .collect(Collectors.toList());
+                .toList();
         String formattedName = initials.toString().replaceAll("\\W", "");
         String numericValue = String.format("%04d", studentCount + 1);
 
