@@ -6,6 +6,8 @@ import com.bfluent.management_api.Bfluent.domain.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CreateStudentUseCase {
@@ -18,7 +20,7 @@ public class CreateStudentUseCase {
     public Student execute(Student studentData){
         this.repository.findByEmaiL(studentData.getEmail()).ifPresent(student->{
             throw new AlreadyExistsException(String
-                    .format("A student with email: %s already exist.", student.getCreatedAt()));
+                    .format("A student with email: %s already exist.", student.getEmail()));
         });
         final var code = generateStudentCode(studentData.getName());
         studentData.setCode(code);
@@ -27,25 +29,14 @@ public class CreateStudentUseCase {
     }
 
     private String generateStudentCode(String name){
-        var amountStudents = this.repository.countStudents();
+        long studentCount = repository.countStudents();
 
-        final var resumeName = Arrays
-                .stream(name.split(" "))
-                .map(n -> name.toUpperCase().charAt(0))
-                .toString()
-                .replace(",","");
+        List<String> initials = Arrays.stream(name.split("\\s+"))
+                .map(word -> String.format("%s", Character.toUpperCase(word.charAt(0))))
+                .collect(Collectors.toList());
+        String formattedName = initials.toString().replaceAll("\\W", "");
+        String numericValue = String.format("%04d", studentCount + 1);
 
-        amountStudents += 1;
-        String numericValue;
-        if (amountStudents < 10) {
-            numericValue = String.format("000%d",amountStudents);
-        } else if (amountStudents < 100) {
-            numericValue = String.format("00%d",amountStudents);
-        } else if (amountStudents < 1000) {
-            numericValue = String.format("0%d",amountStudents);
-        } else {
-            numericValue = String.format("000%d",amountStudents);
-        }
-        return String.format("%s-%s-%s", resumeName,numericValue,"S");
+        return String.join("-", formattedName, numericValue, "S");
     }
 }
