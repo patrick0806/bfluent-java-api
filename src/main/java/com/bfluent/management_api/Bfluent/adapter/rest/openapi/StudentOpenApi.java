@@ -1,5 +1,6 @@
 package com.bfluent.management_api.Bfluent.adapter.rest.openapi;
 
+import com.bfluent.management_api.Bfluent.adapter.rest.dto.PageDTO;
 import com.bfluent.management_api.Bfluent.adapter.rest.dto.student.CreateStudentRequest;
 import com.bfluent.management_api.Bfluent.adapter.rest.dto.student.StudentDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,4 +23,24 @@ public interface StudentOpenApi {
             ),
     })
     public ResponseEntity create(@RequestBody CreateStudentRequest studentData);
+
+    @Operation(summary = "List Students")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of students",
+                    content = { @Content(schema = @Schema(implementation = PageDTO.class), mediaType = "application/json") }
+            ),
+    })
+    public ResponseEntity list(@RequestBody int page, @RequestBody int pageSize);
+
+    @Operation(summary = "Get student by id")
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Student found with success",
+            content = { @Content(schema = @Schema(implementation = StudentDTO.class), mediaType = "application/json") }
+        )
+    })
+    public ResponseEntity getStudentById(String id);
 }
